@@ -1,20 +1,6 @@
 import os
 
-POSTGRES = {
-    'user': os.getenv('POSTGRES_USER', 'postgres'),
-    'pw': os.getenv('POSTGRES_PASSWORD', 'root'),
-    'db': os.getenv('POSTGRES_DB', 'postgres'),
-    'host': os.getenv('POSTGRES_HOST', 'localhost'),
-    'port': os.getenv('POSTGRES_PORT', 5432),
-}
-
-TEST_POSTGRES = {
-    'user': os.getenv('POSTGRES_USER', 'postgres'),
-    'pw': os.getenv('POSTGRES_PASSWORD', 'root'),
-    'db': os.getenv('POSTGRES_DB', 'postgres'),
-    'host': os.getenv('POSTGRES_HOST', 'localhost'),
-    'port': os.getenv('POSTGRES_PORT', 5432),
-}
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
@@ -22,7 +8,9 @@ class Config:
 
     SECRET_KEY = os.getenv('APP_SECRET', 'secret key')
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{host}:{port}/{db}'.format(**POSTGRES)
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+        
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     DOC_USERNAME = 'api'
@@ -34,7 +22,7 @@ class DevConfig(Config):
 
 
 class TestConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{pw}@{host}:{port}/{db}'.format(**TEST_POSTGRES)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///test_db.sqlite3'
     TESTING = True
     DEBUG = True
 
