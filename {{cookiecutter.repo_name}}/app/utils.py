@@ -1,7 +1,7 @@
 from functools import wraps
 
 from flask import url_for, current_app, request, Response, Blueprint
-from flask_restplus import Api
+from flask_restx import Api
 
 
 def add_basic_auth(blueprint: Blueprint, username, password, realm='{{cookiecutter.api_name}}'):
